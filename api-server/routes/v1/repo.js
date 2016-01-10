@@ -267,4 +267,35 @@ router.get('/docs/:type', function (req, res, next) {
         next(err);
     }
 });
+
+/**
+ * [description]
+ *
+ * @method
+ *
+ * @param  {:type book, readme, paper
+ * @param  {[type]} res   [description]
+ * @param  {[type]} next  [description]
+ *
+ * @return {[type]} [description]
+ */
+router.get('/manifest/check', function (req, res, next) {
+    'use strict';
+    try {
+        
+        // we create it
+        repMod.checkManifest(req, function (error, result) {
+            if (error) {
+                res.status(200).send(error);
+            } else {
+                
+                res.status(200).send(result);
+            }
+        });
+        
+    } catch (err) {
+        next(err);
+    }
+});
+
 module.exports = router;

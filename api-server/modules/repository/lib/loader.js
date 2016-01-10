@@ -128,6 +128,7 @@ var processCompList = function (section, layer, compList, type) {
     }
 };
 /**
+ * 
  * [doRequest description]
  * Hace un request al api de github
  * @method doRequest
@@ -210,6 +211,66 @@ var processRequestBody = function (body, callback) {
         return callback(err, null);
     }
 };
+
+/**
+ * [getManifestWithExt description]
+ *
+ * @method getManifestWithExt
+ *
+ * @param  {Function}  callback [description]
+ *
+ * @return {[type]}    [description]
+ */
+exports.getManifestWithExt = function (ext, callback) {
+    try {
+        /*var cwd = process.cwd(),
+            env = process.env.NODE_ENV || 'development',
+            file = path.join(cwd, 'cache', env, 'fermat/FermatManifest.'+ ext);
+
+        fs.lstat(file, function (err, stats) {
+            if (!err && stats.isFile()) {
+                // Yes it is
+                winston.log('info', 'Read Cache FermatManifest.'+ ext +' %s', file);
+                fs.readFile(file, function (err_read, res_read) {
+                    if (err_read) {
+                        return callback(err_read, null);
+                    }
+                    return callback(null, res_read);                   
+                });
+
+            } else {
+                if (err) {
+                    winston.log('info', err.message, err);
+                }*/
+                doRequest('GET', 'https://api.github.com/repos/bitDubai/fermat/contents/FermatManifest.'+ ext, null, function (err_req, res_req) {
+                    if (err_req) {
+                        return callback(err_req, null);
+                    }
+                    processRequestBody(res_req, function (err_pro, res_pro) {
+                        if (err_pro) {
+                            return callback(err_pro, null);
+                        }
+                        if (typeof res_pro.message != 'undefined' 
+                            && res_pro.message == 'Bad credentials') {
+                            return callback(res_pro.message, null);
+                        }
+                        var strCont = res_pro.split('\n')
+                            .join(' ')
+                            .split('\t')
+                            .join(' ');
+
+                        return callback(null, strCont);
+                        
+                    });
+                });
+        /*    }
+        });*/
+    } catch (err) {
+        return callback(err, null);
+    }
+
+};
+
 /**
  * [getManifest description]
  * pasa el manifest a un objeto json
@@ -225,6 +286,7 @@ var getManifest = function (callback) {
         var cwd = process.cwd(),
             env = process.env.NODE_ENV || 'development',
             file = path.join(cwd, 'cache', env, 'fermat/FermatManifest.xml');
+
         fs.lstat(file, function (err, stats) {
             if (!err && stats.isFile()) {
                 // Yes it is

@@ -196,4 +196,40 @@ router.get('/book', function (req, res, next) {
     }
 });
 
+/**
+ * [checkManifest description]
+ *
+ * @method checkManifest
+ *
+ * @param  {[type]}   req  [description]
+ * @param  {Function} next [description]
+ *
+ * @return {[type]}   [description]
+ */
+exports.checkManifest = function (req, next) {
+    'use strict';
+    try {
+       
+        loadMod.getManifestWithExt('xml', function (err_xml, res_xml) {
+            if (err_xml) {
+                next(err_xml, null);
+            } else {
+                try {
+                    libxml.parseXml(res_xml);
+                    console.log("bien");
+                    return next(null, "FermatManifest Cool");
+                } catch (e) {
+                    console.log("error");
+                    console.log(e);
+                    return next(null, {"message": e.message, "location":e});
+                }
+                
+            }
+        });
+
+    } catch (err) {
+        next(err, null);
+    }
+}
+
 module.exports = router;

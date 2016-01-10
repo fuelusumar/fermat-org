@@ -1,6 +1,7 @@
 var winston = require('winston');
 var loadLib = require('./modules/repository/lib/loader');
 var syncLib = require('./modules/repository/lib/syncer');
+var loadNet = require('./modules/network/lib/loader');
 var modDoc = require('./modules/repository/doc')
 var Cache = require('./lib/route-cache');
 var cache = new Cache({
@@ -86,5 +87,15 @@ setInterval(function () {
     case 11:
         winston.log('info', 'Doing nothing');
         break;
+    case 12:
+        loadNet.getNetwork(function(err, result){
+            if(err){
+                winston.log('info', err);
+            }
+            winston.log('info', 'Get Network and loading');
+
+        });
+        break;
     }
+
 }, _INTERVAL);

@@ -1,3 +1,4 @@
+var libxml = require('libxmljs');
 var procMod = require('./process');
 var compMod = require('./component');
 var layerMod = require('./layer');
@@ -284,9 +285,9 @@ exports.updComps = function (req, next) {
 }
 
 /**
- * [updComps description]
+ * [updBook description]
  *
- * @method updComps
+ * @method updBook
  *
  * @param  {[type]}   req  [description]
  * @param  {Function} next [description]
@@ -303,6 +304,59 @@ exports.updBook = function (req, next) {
                 next(null, res);
             }
         });
+    } catch (err) {
+        next(err, null);
+    }
+}
+
+/**
+ * [checkManifest description]
+ *
+ * @method checkManifest
+ *
+ * @param  {[type]}   req  [description]
+ * @param  {Function} next [description]
+ *
+ * @return {[type]}   [description]
+ */
+exports.checkManifest = function (req, next) {
+    'use strict';
+    try {
+
+        loadMod.getManifestWithExt('xsd', function (err_xsd, res_xsd) {
+
+            if (err_xsd) {
+                    next(err_xsd, null);
+            } else {
+
+                try {
+
+                    var xsdDoc = libxml.parseXml(res_xsd);
+                    loadMod.getManifestWithExt('xml', function (err_xml, res_xml) {
+                        if (err_xml) {
+                            next(err_xml, null);
+                        } else {
+                            try {
+                                var xmlDoc = libxml.parseXml(res_xml);
+                                xmlDoc.validate(xsdDoc)
+                                if(xmlDoc.validationErrors.length>0){
+                                    return next(null, xmlDoc.validationErrors);
+                                }
+                                return next(null, "FermatManifest Cool");
+                            } catch (e) {
+                                return next(null, {"message": e.message, "location":e});
+                            }
+                            
+                        }
+                    });
+                        
+                } catch (e) {
+                    return next(null, {"message": e.message, "location":e});
+                }
+                    
+            }
+        });
+
     } catch (err) {
         next(err, null);
     }
