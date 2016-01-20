@@ -21,33 +21,41 @@ var tknDao = new Dao('Tkn', tknSch, TknMdl, 'App', appSch, AppMdl, 'Usr', usrSch
  */
 exports.insertToken = function(TknMdl, callback) {
 	'use strict';
-	appDao.insertSchema(TknMdl, function(err, token) {
+	tknDao.insertSchema(TknMdl, function(err, token) {
+		callback(err, token);
+	});
+};
+/**
+ * [updateTokenByAxsKey description]
+ * @param  {[type]}   axs_key  [description]
+ * @param  {[type]}   set      [description]
+ * @param  {Function} callback [description]
+ * @return {[type]}            [description]
+ */
+exports.updateTokenByAxsKey = function(axs_key, set, callback) {
+	'use strict';
+	set.upd_at = new mongoose.Types.ObjectId();
+	tknDao.updateSchema({
+		axs_key: axs_key
+	}, set, {}, function(err, token) {
 		callback(err, token);
 	});
 };
 
-exports.updateTokenByAccesToken = function (axs_key, set, callback) {
-    'use strict';
-    set.upd_at = new mongoose.Types.ObjectId();
-    appDao.updateSchema({
-        axs_key: axs_key
-    }, set, {}, function (err, token) {
-        callback(err, token);
-    });
-};
 /**
- * [findTokenByAccesToken description]
- * @param  {[type]}   query    [description]
- * @param  {[type]}   path     [description]
+ * [findTokenByAxsKey description]
+ * @param  {[type]}   axs_key  [description]
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
  */
-exports.findTokenByAccesToken = function(query, callback) {
+exports.findTokenByAxsKey = function(axs_key, callback) {
 	'use strict';
-	appDao.findAndPopulateSchema(query, '_usr_id _app_id', function(err, token) {
+	tknDao.findAndPopulateSchema({
+		'axs_key': axs_key
+	}, '_usr_id _app_id', function(err, token) {
 		callback(err, token);
 	});
-};
+}
 
 /**
  * [findAllTokens description]
@@ -58,7 +66,7 @@ exports.findTokenByAccesToken = function(query, callback) {
  */
 exports.findAllTokens = function(query, order, callback) {
 	'use strict';
-	appDao.findAndPopulateAllSchemaLst(query, order, '_usr_id _app_id', function(err, token) {
+	tknDao.findAndPopulateAllSchemaLst(query, order, '_usr_id _app_id', function(err, token) {
 		callback(err, token);
 	});
 };

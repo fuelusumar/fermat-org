@@ -38,30 +38,15 @@ exports.findAppById = function (_id, callback) {
 };
 
 /**
- * Find app by ownerId
- * @param  {[type]}   _owner_id [description]
- * @param  {Function} callback  [description]
- * @return {[type]}             [description]
- */
-exports.findAppByOwnerId = function (_owner_id, callback) {
-    'use strict';
-     appDao.findSchema({
-        _owner_id: _owner_id
-    }, function (err, app) {
-        callback(err, app);
-    });
-};
-
-/**
  * Find app by name
  * @param  {[type]}   name     [description]
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
  */
-exports.findAppByName = function (name, callback) {
+exports.findAppByApiKey = function (api_key, callback) {
     'use strict';
      appDao.findSchema({
-        name: name
+        api_key: api_key
     }, function (err, app) {
         callback(err, app);
     });
@@ -120,7 +105,7 @@ exports.updateAppById = function (_id, set, callback) {
  */
 exports.delAllApps = function (callback) {
     'use strict';
-    compDao.delAllSchemas(function (err, app) {
+    appDao.delAllSchemas(function (err, app) {
         callback(err, app);
     });
 };

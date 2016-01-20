@@ -1,3 +1,4 @@
+var mongoose = require('mongoose');
 var tokenSrv = require('./services/tkn');
 var tokenMdl = require('./models/tkn');
 
@@ -32,23 +33,22 @@ exports.insToken = function(_usr_id, _app_id, callback) {
 exports.updateToken = function(axs_key, callback) {
 	'use strict';
 	try {
-		tokenSrv.findTokenByAccesToken(axs_key, function(err_token, res_token) {
+		tokenSrv.findTokenByAxsKey(axs_key, function(err_token, res_token) {
 			if (err_token) {
 				return callback(err_token, null);
 			}
 			if (res_token) {
 				var set_obj = {};
-				set_obj.upd_at = new Date();
-				res_token.upd_at = new Date();
+				set_obj.upd_at = new mongoose.Types.ObjectId();
 				if (Object.keys(set_obj).length > 0) {
-					tokenSrv.updateTokenByAccesToken(res_token.axs_key, set_obj, function(err_upd, res_upd) {
+					tokenSrv.updateTokenByAxsKey(res_token.axs_key, set_obj, function(err_upd, res_upd) {
 						if (err_upd) {
 							return callback(err_upd, null);
 						}
-						return callback(null, res_token);
+						return callback(null, res_upd);
 					});
 				}
-			}
+			} else return callback(null, res_token);
 		});
 	} catch (err) {
 		return callback(err, null);
@@ -73,21 +73,20 @@ exports.getListTokens = function(callback) {
 	}
 };
 
-//{axs_tkn: var}
 /**
  * [getToken description]
- * @param  {[type]}   query    [description]
+ * @param  {[type]}   axs_key  [description]
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
  */
-exports.getToken = function(query, callback) {
+exports.getToken = function(axs_key, callback) {
 	'use strict';
 	try {
-		tokenSrv.findTokenByAccesToken(query, function(err, tokens) {
+		tokenSrv.findTokenByAxsKey(axs_key, function(err, token) {
 			if (err) {
 				return callback(err, null);
 			}
-			return callback(null, tokens);
+			return callback(null, token);
 		});
 	} catch (err) {
 		return callback(err, null);
