@@ -1,5 +1,5 @@
-var modApp = require('../../../modules/auth/app');
-var modUsr = require('../../../modules/auth/user');
+var appMod = require('../../../modules/auth/app');
+var usrMod = require('../../../modules/auth/user');
 var mongoose = require('mongoose');
 
 
@@ -9,24 +9,24 @@ var _INTERVAL = 2000;
 var loop = 0;
 console.log('info', 'Update interval on every %s minutes', (_INTERVAL / 1000) / 60);
 setInterval(function() {
-	var mod = loop % 9;
+	var mod = loop % 3;
 	loop++;
 	switch (mod) {
 		case 0:
 			console.log('info', 'Starting database connexion');
 			var db = require('../../../db');
-			modApp.delAllApps(function(err, res) {
+			/*appMod.delAllApps(function(err, res) {
 				if (err) {
 					console.log('error', err);
 				} else {
 					console.log('info', 'Delete all app succes ok');
 					console.log(res);
 				}
-			});
+			});*/
 			break;
-		case 1:
+		/*case 1:
 			console.log('info', 'Obtaining user by username(campol)');
-			modUsr.getUsrsByUsrnm('campol', function(err_res, res_usrs) {
+			usrMod.getUsrsByUsrnm('campol', function(err_res, res_usrs) {
 				if (err_res) {
 					console.log('error', err_res);
 				} else {
@@ -38,7 +38,7 @@ setInterval(function() {
 			break;
 		case 2:
 			console.log('info', 'Register app1');
-			modApp.insApp(ownerId, 'app1', 'desc1', function(err, res) {
+			appMod.insApp(ownerId, 'app1', 'desc1', function(err, res) {
 				if (err) {
 					console.log('error', err);
 				} else {
@@ -50,7 +50,7 @@ setInterval(function() {
 			break;
 		case 3:
 			console.log('info', 'Obtaining user by username(mceledon)');
-			modUsr.getUsrsByUsrnm('mceledon', function(err_res, res_usrs) {
+			usrMod.getUsrsByUsrnm('mceledon', function(err_res, res_usrs) {
 				if (err_res) {
 					console.log('error', err_res);
 				} else {
@@ -60,7 +60,7 @@ setInterval(function() {
 				}
 			});
 			console.log('info', 'Register app2');
-			modApp.insApp(ownerId, 'app2', 'desc2', function(err, res) {
+			appMod.insApp(ownerId, 'app2', 'desc2', function(err, res) {
 				if (err) {
 					console.log('error', err);
 				} else {
@@ -71,7 +71,7 @@ setInterval(function() {
 			break;
 		case 4:
 			console.log('info', 'Register app3');
-			modApp.insApp(ownerId, 'app3', 'desc3', function(err, res) {
+			appMod.insApp(ownerId, 'app3', 'desc3', function(err, res) {
 				if (err) {
 					console.log('error', err);
 				} else {
@@ -82,7 +82,7 @@ setInterval(function() {
 			break;
 		case 5:
 			console.log('info', 'Register app4');
-			modApp.insApp(ownerId, 'app1', 'desc4', function(err, res) {
+			appMod.insApp(ownerId, 'app1', 'desc4', function(err, res) {
 				if (err) {
 					console.log('error', err);
 				} else {
@@ -92,7 +92,7 @@ setInterval(function() {
 			});
 			break;
 		case 6:
-			modApp.getApps(function(err, res) {
+			appMod.getApps(function(err, res) {
 				if (err) {
 					console.log('error', err);
 				} else {
@@ -100,9 +100,10 @@ setInterval(function() {
 					console.log(res);
 				}
 			});
-			break;
-		case 7:
-			modApp.findAppByApiKey(apiKey, function(err, res) {
+			break;*/
+		case 1:
+			apiKey = "56a10473b27e63185c6970d6";
+			appMod.findAppByApiKey(apiKey, function(err, res) {
 				if (err) {
 					console.log('error', err);
 				} else {
@@ -111,7 +112,7 @@ setInterval(function() {
 				}
 			});
 			break;
-		case 8:
+		case 2:
 			console.log('info', 'Killing process');
 			process.exit(1);
 			break;

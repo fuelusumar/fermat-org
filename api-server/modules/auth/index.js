@@ -1,6 +1,6 @@
-var modApp = require('./app');
-var modTkn = require('./token');
-var modUsr = require('./user');
+var appMod = require('./app');
+var tknMod = require('./token');
+var usrMod = require('./user');
 var libGithb = require('./lib/github');
 
 /**
@@ -13,11 +13,12 @@ var libGithb = require('./lib/github');
 exports.getAutorization = function(url, api_key, callback) {
 	try {
 		//verifies that the API key is registered
-		modApp.findAppByApiKey(api_key, function(err_app, res_app) {
+		appMod.findAppByApiKey(api_key, function(err_app, res_app) {
 			if (err_app) {
-				console.log('error', err_app);
+				console.log('Error', err_app);
 				return callback(err_app, null);
-			} else {
+			}
+			if (res_app) {
 				console.log('info', 'APi Key found');
 				//Get user data that did login
 				libGithb.getUsrGithub(url, function(error, usr) {
@@ -27,7 +28,7 @@ exports.getAutorization = function(url, api_key, callback) {
 					} else {
 						console.log("Get user");
 						//Registering the user and developer in the database
-						modUsr.insOrUpdUsr(usr.usrnm, usr.email, usr.name, usr.bday, usr.location, usr.avatar_url,
+						usrMod.insOrUpdUsr(usr.usrnm, usr.email, usr.name, usr.bday, usr.location, usr.avatar_url,
 							usr.github_tkn, usr.url, usr.bio,
 							function(err_usr, res_usr) {
 								if (err_usr) {
@@ -37,20 +38,30 @@ exports.getAutorization = function(url, api_key, callback) {
 								if (res_usr) {
 									console.log('info', 'Usr and Dev inserted');
 									//Generating the token user
-									modTkn.insTkn(res_usr._id, res_app._id, function(err_tkn, res_tkn) {
+									tknMod.insTkn(res_usr._id, res_app._id, function(err_tkn, res_tkn) {
 										if (err_tkn) {
 											console.log('error', err_tkn);
 											return callback(err_tkn, null);
-										} else {
-											console.log('info', 'Tkn generated');
-											return callback(null, res_tkn);
 										}
+										if (res_tkn) {
+											console.log('info', 'Tkn generated');
+											//return token
+											tknMod.getTkn(res_tkn.axs_key, function(err_tk, res_tk) {
+												if (err_tk) {
+													console.log('Error', err_tkn);
+													return callback(err_tkn, null);
+												}
+												if (res_tk) {
+													return callback(null, res_tk);
+												} else return callback("Unauthorized. Token no found", null);
+											});
+										} else return callback("Unauthorized. Error generating token", null);
 									});
-								}
+								} else return callback("Unauthorized. Error logging the user", null);
 							});
 					}
 				});
-			}
+			} else return callback("Unauthorized. Api key no found", null);
 		});
 	} catch (err) {
 		console.log("Error", err);
@@ -68,25 +79,13 @@ exports.getAutorization = function(url, api_key, callback) {
 exports.verifiAxsKeyRelApiKey = function(api_key, axs_key, callback) {
 	'use strict';
 	try {
-		modApp.findAppByApiKey(api_key, function(err, res) {
+		verifAxsKeyRelApiKey(api_key, axs_key, function(err, res) {
 			if (err) {
 				console.log('error', err);
 				return callback(err, false);
 			}
 			if (res) {
-				console.log('info', 'APi Key found');
-				modTkn.getTkn(axs_key, function(err_res, res_tkn) {
-					if (err_res) {
-						console.log('error', err_res);
-						return callback(err_res, false);
-					}
-					if (res_tkn) {
-						console.log('info', 'access key found');
-						if (res_tkn._app_id.api_key === api_key)
-							return callback(null, true);
-						else return callback(null, false);
-					} else return callback(null, false);
-				});
+				return callback(null, true);
 			} else return callback(null, false);
 		});
 	} catch (err) {
@@ -95,6 +94,34 @@ exports.verifiAxsKeyRelApiKey = function(api_key, axs_key, callback) {
 	}
 };
 
+verifAxsKeyRelApiKey = function(api_key, axs_key, callback) {
+	'use strict';
+	appMod.findAppByApiKey(api_key, function(err, res) {
+		if (err) {
+			console.log('error', err);
+			return callback(err, false);
+		}
+		if (res) {
+			console.log('info', 'APi Key found');
+			tknMod.getTkn(axs_key, function(err_res, res_tkn) {
+				if (err_res) {
+					console.log('error', err_res);
+					return callback(err_res, false);
+				}
+				if (res_tkn) {
+					console.log('info', 'access key found');
+					if (res_tkn._app_id.api_key == api_key) {
+						console.log('info', 'Match');
+						return callback(null, true);
+					} else {
+						console.log('info', 'No match');
+						return callback(null, false);
+					}
+				} else return callback(null, false);
+			});
+		} else return callback(null, false);
+	});
+};
 /**
  * [verifiAxsKeyRelApiKeyAndUsrnm description]
  * @param  {[type]}   api_key  [description]
@@ -106,23 +133,27 @@ exports.verifiAxsKeyRelApiKey = function(api_key, axs_key, callback) {
 exports.verifiAxsKeyRelApiKeyAndUsrnm = function(api_key, axs_key, usrnm, callback) {
 	'use strict';
 	try {
-		modApp.findAppByApiKey(api_key, function(err, res) {
+		appMod.findAppByApiKey(api_key, function(err, res) {
 			if (err) {
 				console.log('error', err);
 				return callback(err, false);
 			}
 			if (res) {
 				console.log('info', 'APi Key found');
-				modTkn.getTkn(axs_key, function(err_res, res_tkn) {
+				tknMod.getTkn(axs_key, function(err_res, res_tkn) {
 					if (err_res) {
 						console.log('error', err_res);
 						return callback(err_res, false);
 					}
 					if (res_tkn) {
 						console.log('info', 'access key found');
-						if (res_tkn._app_id.api_key === api_key && res_tkn._usr_id.usrnm === usrnm)
+						if ((res_tkn._app_id.api_key == api_key) && (res_tkn._usr_id.usrnm == usrnm)) {
+							console.log('info', 'Match');
 							return callback(null, true);
-						else return callback(null, false);
+						} else {
+							console.log('info', 'No match');
+							return callback(null, false);
+						}
 					} else return callback(null, false);
 				});
 			} else return callback(null, false);
@@ -143,14 +174,14 @@ exports.verifiAxsKeyRelApiKeyAndUsrnm = function(api_key, axs_key, usrnm, callba
  */
 exports.logout = function(api_key, axs_key, callback) {
 	try {
-		verifiAxsKeyRelApiKey(api_key, axs_key, function(err, res_del) {
+		verifAxsKeyRelApiKey(api_key, axs_key, function(err, res_del) {
 			if (err) {
 				console.log('error', err);
 				return callback(err, false);
 			}
 			if (res_del) {
 				console.log("Authorization granted")
-				modTkn.delTkn(axs_key, function(err_res, res_tkn) {
+				tknMod.delTkn(axs_key, function(err_res, res_tkn) {
 					if (err_res) {
 						console.log('error', err_res);
 						return callback(err_res, false);
@@ -169,7 +200,7 @@ exports.logout = function(api_key, axs_key, callback) {
 			}
 		});
 	} catch (err) {
-		console.log("Error", error);
+		console.log("Error", err);
 		return callback(err, false);
 	}
 };

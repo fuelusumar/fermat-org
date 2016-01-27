@@ -25,8 +25,19 @@ exports.getUsrGithub = function(url, callback) {
 				}
 				console.log("return data user");
 				res_usr = JSON.parse(res_usr);
-				res_usr.set('github_tkn', axs_tkn);
-				return callback(null, res_usr);
+				var usr = {};
+				usr.usrnm = res_usr.login;
+				usr.email = res_usr.email;
+				usr.name = res_usr.name;
+				usr.bday = null;
+				usr.location = res_usr.location;
+				usr.avatar_url = res_usr.avatar_url;
+				usr.github_tkn = axs_tkn; 
+				usr.url = res_usr.url;
+				usr.bio = res_usr.bio;
+ 				
+				console.log(usr);
+				return callback(null, usr);
 			});
 		});
 	} catch (error) {
