@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LOGIN</title>
+<script src="js/jquery-2.1.4.min.js" type="text/javascript"></script>
+<script src="js/jquery.cookie.js" type="text/javascript"></script>
+<script src="js/login/login.js" type="text/javascript"></script>
+<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<label>Login con GitHub</label> <input type="button" id="button"
+				value="Login" onclick="getAuthCode()" />
+		</div>
+
+		<div class="row">
+			<label>Logout</label> <input type="button" id="logout" value="Logout"
+				onclick="logout()" />
+		</div>
+		
+		<div class="row">
+			<label>User</label>
+			<div class="col-md-2">
+				<label>Name</label>
+				 <input type="text" name="name" id="name" />
+			</div> 
+			
+			<div class="col-md-2">
+				<label>User name</label>
+				 <input type="text" name="usrnm" id="usrnm" />
+			</div> 
+			
+			<div class="col-md-2">
+				<label>Email</label>
+				 <input type="text" name="email" id="email" />
+			</div> 
+			
+			<div class="col-md-2">
+				<label>Github token</label>
+				 <input type="text" name="github_tkn" id="github_tkn" />
+			</div> 
+			
+			<div class="col-md-2">
+				<label>Avatar</label>
+				 <input type="text" name="avatar_url" id="avatar_url" />
+			</div> 
+			<div class="col-md-2">
+				<label>Access Key</label>
+				 <input type="text" name="axs_key" id="axs_key" />
+			</div> 
+		</div>
+	</div>
+</body>
+</html>

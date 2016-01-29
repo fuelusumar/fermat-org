@@ -54,7 +54,7 @@ exports.findTknByAxsKey = function(axs_key, callback) {
 	}, '_usr_id _app_id', function(err, tkn) {
 		callback(err, tkn);
 	});
-}
+};
 
 /**
  * [findTknByUsrIdAppId description]
@@ -71,7 +71,7 @@ exports.findTknByUsrIdAppId = function(_usr_id, _app_id, callback) {
 	}, '_usr_id _app_id', function(err, tkn) {
 		callback(err, tkn);
 	});
-}
+};
 
 /**
  * [findAllTkns description]
