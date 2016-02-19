@@ -60,15 +60,11 @@ var release = function (req) {
  */
 router.use(lock);
 /**
- * [description]
- *
- * @method
- *
- * @param  {[type]} req   [description]
- * @param  {[type]} res   [description]
- * @param  {[type]} next  [description]
- *
- * @return {[type]} [description]
+ * @api {post} /v1/repo/layer/ add layer
+ * @apiVersion 0.0.1
+ * @apiName AddLayer
+ * @apiGroup Repo-Layer
+ * @apiDescription Add a layer to the architecture of fermat.
  */
 router.post('/', function (req, res, next) {
     'use strict';
@@ -93,15 +89,11 @@ router.post('/', function (req, res, next) {
     }
 });
 /**
- * [description]
- *
- * @method
- *
- * @param  {[type]} req   [description]
- * @param  {[type]} res   [description]
- * @param  {[type]} next  [description]
- *
- * @return {[type]} [description]
+ * @api {get} /v1/repo/layer/ get list layers
+ * @apiVersion 0.0.1
+ * @apiName ListLayers
+ * @apiGroup Repo-Layer
+ * @apiDescription get a list of layer to the architecture of fermat.
  */
 router.get('/', function (req, res, next) {
     'use strict';
@@ -118,15 +110,12 @@ router.get('/', function (req, res, next) {
     }
 });
 /**
- * [description]
- *
- * @method
- *
- * @param  {[type]} req   [description]
- * @param  {[type]} res   [description]
- * @param  {[type]} next  [description]
- *
- * @return {[type]} [description]
+ * @api {get} /v1/repo/layer/:layer_id get layer
+ * @apiVersion 0.0.1
+ * @apiName GetLay
+ * @apiGroup Repo-Layer
+ * @apiParam {ObjectId} layer_id Represents the identifier of the layer
+ * @apiDescription Get a layer to the architecture of fermat.
  */
 router.get('/:layer_id', function (req, res, next) {
     'use strict';
@@ -150,15 +139,12 @@ router.get('/:layer_id', function (req, res, next) {
     }
 });
 /**
- * [description]
- *
- * @method
- *
- * @param  {[type]} req   [description]
- * @param  {[type]} res   [description]
- * @param  {[type]} next  [description]
- *
- * @return {[type]} [description]
+ * @api {put} /v1/repo/layer/:layer_id update layer
+ * @apiVersion 0.0.1
+ * @apiName UptLay
+ * @apiGroup Repo-Layer
+ * @apiParam {ObjectId} layer_id Represents the identifier of the layer
+ * @apiDescription Update layer to the architecture of fermat.
  */
 router.put('/:layer_id', function (req, res, next) {
     'use strict';
@@ -226,6 +212,15 @@ router.put('/:layer_id', function (req, res, next) {
 });
 
 req.params.layer_id,
+ */
+
+/**
+ * @api {delete} /v1/repo/layer/:layer_id delete layer
+ * @apiVersion 0.0.1
+ * @apiName DelLay
+ * @apiGroup Repo-Layer
+ * @apiParam {ObjectId} layer_id Represents the identifier of the layer
+ * @apiDescription Delete layer to the architecture of fermat.
  */
 router.delete('/:layer_id', function (req, res, next) {
     'use strict';

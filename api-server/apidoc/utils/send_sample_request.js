@@ -40,13 +40,12 @@ define([
             if ( ! element.optional && element.defaultValue !== '') {
                 value = element.defaultValue;
             }
-            header[key] = value;
+            header[key] = $.type(value) === "string" ? escapeHtml(value) : value;
           });
       });
 
       // create JSON dictionary of parameters
       var param = {};
-      var paramType = {};
       $root.find(".sample-request-param:checked").each(function(i, element) {
           var group = $(element).data("sample-request-param-group-id");
           $root.find("[data-sample-request-param-group=\"" + group + "\"]").each(function(i, element) {
@@ -55,8 +54,7 @@ define([
             if ( ! element.optional && element.defaultValue !== '') {
                 value = element.defaultValue;
             }
-            param[key] = value;
-            paramType[key] = $(element).next().text();
+            param[key] = $.type(value) === "string" ? escapeHtml(value) : value;
           });
       });
 
@@ -76,41 +74,50 @@ define([
           }
       } // for
 
-      $root.find(".sample-request-response").fadeTo(250, 1);
-      $root.find(".sample-request-response-json").html("Loading...");
-      refreshScrollSpy();
-
-      _.each( param, function( val, key ) {
-          var t = paramType[ key ].toLowerCase();
-          if ( t === 'object' || t === 'array' ) {
-              try {
-                  param[ key ] = JSON.parse( val );
-              } catch (e) {
-              }
-          }
-      });
-
       // send AJAX request, catch success or error callback
       var ajaxRequest = {
           url        : url,
+          dataType   : "json",
+          contentType: "application/json",
           headers    : header,
-          data       : param,
           type       : type.toUpperCase(),
           success    : displaySuccess,
           error      : displayError
       };
 
+      if (type === 'get') {
+          ajaxRequest.url = url + paramToQueryParms(param),
+          ajaxRequest.dataType = "text";
+          ajaxRequest.contentType = "text/plain";
+      } else {
+          if ( ! $.isEmptyObject(param)) {
+              ajaxRequest.data = JSON.stringify(param);
+          }
+      }
       $.ajax(ajaxRequest);
 
+      function paramToQueryParms(param) {
+          var p = 0;
+          var queryParms = "";
+          for (var k in param) {
+              if (p === 0) {
+                  queryParms += "?" + k + "=" + param[k];
+              } else {
+                  queryParms += "&" + k + "=" + param[k];
+              }
+              p++;
+          }
+          return queryParms;
+      }
 
-      function displaySuccess(data, status, jqXHR) {
+      function displaySuccess(data) {
           var jsonResponse;
           try {
-              jsonResponse = JSON.parse(jqXHR.responseText);
-              jsonResponse = JSON.stringify(jsonResponse, null, 4);
+              jsonResponse = JSON.stringify(data, null, 4);
           } catch (e) {
               jsonResponse = data;
           }
+          $root.find(".sample-request-response").fadeTo(250, 1);
           $root.find(".sample-request-response-json").html(jsonResponse);
           refreshScrollSpy();
       };
@@ -122,7 +129,7 @@ define([
               jsonResponse = JSON.parse(jqXHR.responseText);
               jsonResponse = JSON.stringify(jsonResponse, null, 4);
           } catch (e) {
-              jsonResponse = escape(jqXHR.responseText);
+              jsonResponse = jqXHR.responseText;
           }
 
           if (jsonResponse)

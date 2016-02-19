@@ -53,8 +53,9 @@ router.use("/usrs/:usr_id/platfrms", auth, platfrmRout);
 router.use("/usrs/:usr_id/comps", auth, compRout);
 
 /**
- * @api {get} /v1/repo/comps/reload
+ * @api {get} /v1/repo/comps/reload reload
  * @apiName Reload
+ * @apiVersion 0.0.1
  * @apiGroup REPO
  * @apiDescription Updates the database repository components fermat.
  */
@@ -92,10 +93,11 @@ router.get('/comps/reload', function (req, res, next) {
 });
 
 /**
- * @api {get} /v1/repo/comps
+ * @api {get} /v1/repo/comps get components
  * @apiName GetComps
+ * @apiVersion 0.0.1
  * @apiGroup REPO
- * @apiDescription List of layers, super layer, platforms, components and processes fermat.
+ * @apiDescription List of layers, super layer, platforms, components and processes from architecture of fermat.
  */
 router.get('/comps', function (req, res, next) {
     'use strict';
@@ -129,8 +131,9 @@ router.get('/comps', function (req, res, next) {
     }
 });
 /**
- * @api {get} /v1/repo/devs
+ * @api {get} /v1/repo/devs get developers
  * @apiName GetDevs
+ * @apiVersion 0.0.1
  * @apiGroup REPO
  * @apiDescription Get information from the developers involved in the repository fermat.
  */
@@ -166,10 +169,11 @@ router.get('/devs', function (req, res, next) {
     }
 });
 /**
- * @api {get} /v1/repo/procs
+ * @api {get} /v1/repo/procs get process
  * @apiName GetProcs
+ * @apiVersion 0.0.1
  * @apiGroup REPO
- * @apiDescription list processes fermat repository.
+ * @apiDescription Get list processes from architecture of fermat.
  */
 router.get('/procs', function (req, res, next) {
     'use strict';
@@ -204,8 +208,9 @@ router.get('/procs', function (req, res, next) {
     }
 });
 /**
- * @api {get} /v1/repo/readme
+ * @api {get} /v1/repo/readme get readme
  * @apiName GetReadme
+ * @apiVersion 0.0.1
  * @apiGroup REPO
  * @apiDescription Get the contents of the readme of fermat.
  */
@@ -224,10 +229,11 @@ router.get('/readme', function (req, res, next) {
     }
 });
 /**
- * @api {get} /v1/repo/book
+ * @api {get} /v1/repo/book get book
  * @apiName GetBook
+ * @apiVersion 0.0.1
  * @apiGroup REPO
- * @apiDescription Get the contents of the book fermat.
+ * @apiDescription Get the contents of the book of fermat.
  */
 router.get('/book', function (req, res, next) {
     'use strict';
@@ -244,10 +250,11 @@ router.get('/book', function (req, res, next) {
     }
 });
 /**
- * @api {get} /v1/repo/docs/:type
+ * @api {get} /v1/repo/docs/:type get docs
  * @apiName GetDocs
+ * @apiVersion 0.0.1
  * @apiGroup REPO
- * @apiDescription Get the contents of the readme fermat.
+ * @apiDescription Get the contents of the documentation of fermat.
  * @apiParam {String} type Represents the type of documentation (book, readme, paper).
  */
 router.get('/docs/:type', function (req, res, next) {
@@ -278,8 +285,9 @@ router.get('/docs/:type', function (req, res, next) {
 });
 
 /**
- * @api {get} /v1/repo/manifest/check
+ * @api {get} /v1/repo/manifest/check check manifest
  * @apiName CheckManifest
+ * @apiVersion 0.0.1
  * @apiGroup REPO
  * @apiDescription checks if the manifest has a correct format.
  */

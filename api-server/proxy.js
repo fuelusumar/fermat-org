@@ -6,15 +6,15 @@ var winston = require('winston'),
     httpProxy = require('http-proxy');
 var proxy_api = {
     host: '127.0.0.1',
-    port: 80
+    port: 3001
 };
 var prod_api = {
     host: '127.0.0.1',
-    port: 8080
+    port: 3000
 };
 var dev_api = {
     host: '127.0.0.1',
-    port: 8081
+    port: 3002
 };
 /**
  * creates proxy servers and starts http server to redirect requests according to version

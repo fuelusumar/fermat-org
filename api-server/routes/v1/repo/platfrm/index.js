@@ -59,15 +59,11 @@ var release = function (req) {
  */
 router.use(lock);
 /**
- * [description]
- *
- * @method
- *
- * @param  {[type]} req   [description]
- * @param  {[type]} res   [description]
- * @param  {[type]} next  [description]
- *
- * @return {[type]} [description]
+ * @api {post} /v1/repo/platfrm/ add platform
+ * @apiVersion 0.0.1
+ * @apiName AddPlatform
+ * @apiGroup Repo-Platform
+ * @apiDescription Add a platform to the architecture of fermat.
  */
 router.post('/', function (req, res, next) {
     'use strict';
@@ -90,17 +86,12 @@ router.post('/', function (req, res, next) {
         next(err);
     }
 });
-
 /**
- * [description]
- *
- * @method
- *
- * @param  {[type]} req   [description]
- * @param  {[type]} res   [description]
- * @param  {[type]} next  [description]
- *
- * @return {[type]} [description]
+ * @api {get} /v1/repo/platfrm/ list platforms
+ * @apiVersion 0.0.1
+ * @apiName ListPlatforms
+ * @apiGroup Repo-Platform
+ * @apiDescription Get list platforms from the architecture of fermat.
  */
 router.get('/', function (req, res, next) {
     'use strict';
@@ -119,15 +110,12 @@ router.get('/', function (req, res, next) {
     }
 });
 /**
- * [description]
- *
- * @method
- *
- * @param  {[type]} req   [description]
- * @param  {[type]} res   [description]
- * @param  {[type]} next  [description]
- *
- * @return {[type]} [description]
+ * @api {get} /v1/repo/platfrm/:platfrm_id get platform
+ * @apiVersion 0.0.1
+ * @apiName GetPlatform
+ * @apiGroup Repo-Platform
+ * @apiParam {ObjectId} platfrm_id Represents the identifier of the platform. 
+ * @apiDescription Get platform from the architecture of fermat.
  */
 router.get('/:platfrm_id', function (req, res, next) {
     'use strict';
@@ -150,18 +138,13 @@ router.get('/:platfrm_id', function (req, res, next) {
     }
 });
 /**
- * [description]
- *
- * @method
- *
- * @param  {[type]} req   [description]
- * @param  {[type]} res   [description]
- * @param  {[type]} next  [description]
- *
- * @return {[type]} [description]
+ * @api {put} /v1/repo/platfrm/:platfrm_id update platform
+ * @apiVersion 0.0.1
+ * @apiName UptPltf
+ * @apiGroup Repo-Platform
+ * @apiParam {ObjectId} platfrm_id Represents the identifier of the platform. 
+ * @apiDescription Update platform from the architecture of fermat.
  */
-
-
 router.put('/:platfrm_id', function (req, res, next) {
     'use strict';
     try {
@@ -188,15 +171,12 @@ router.put('/:platfrm_id', function (req, res, next) {
     }
 });
 /**
- * [description]
- *
- * @method
- *
- * @param  {[type]} req   [description]
- * @param  {[type]} res   [description]
- * @param  {[type]} next  [description]
- *
- * @return {[type]} [description]
+ * @api {delete} /v1/repo/platfrm/:platfrm_id delete platform
+ * @apiVersion 0.0.1
+ * @apiName DelPltf
+ * @apiGroup Repo-Platform
+ * @apiParam {ObjectId} platfrm_id Represents the identifier of the platform. 
+ * @apiDescription Delete platform from the architecture of fermat.
  */
 router.delete('/:platfrm_id', function (req, res, next) {
     'use strict';
