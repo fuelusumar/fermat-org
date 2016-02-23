@@ -577,14 +577,17 @@ exports.getAllProces = function (callback) {
 exports.delAllProcs = function (callback) {
     'use strict';
     try {
+        console.log("deleting all procs");
         procSrv.delAllProcs(function (err, procs) {
             if (err) {
                 return callback(err, null);
             }
+            console.log("deleting all steps");
             stepSrv.delAllSteps(function (err, steps) {
                 if (err) {
                     return callback(err, null);
                 }
+                console.log("deleted all steps");
                 return callback(null, true);
             });
         });

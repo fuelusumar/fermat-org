@@ -578,7 +578,10 @@ var saveManifest = function (callback) {
 					var _suprlays = res_load.suprlays;
 					var _procs = res_load.procs;
 					var _lays = res_load.layers;
+					console.log("execute saveManifest");
+					console.log("define loopLays");
 					var loopLays = function (u) {
+						console.log("execute loopLays");
 						if (u < _lays.length) {
 							var _lay = _lays[u];
 							layerMod.insOrUpdLayer(_lay.name ? _lay.name.trim().toLowerCase() : null, _lay.language ? _lay.language.toLowerCase() : null, _lay.super_layer ? _lay.super_layer.trim().toUpperCase() : null, u, function (err_lay, res_lay) {
@@ -597,7 +600,9 @@ var saveManifest = function (callback) {
 							});
 						}
 					};
+					console.log("define loopProcs");
 					var loopProcs = function (s) {
+						console.log("execute loopProcs");
 						if (s < _procs.length) {
 							var _proc = _procs[s];
 							//platfrm, name, desc, prev, next, callback
@@ -644,7 +649,9 @@ var saveManifest = function (callback) {
 							loopLays(0);
 						}
 					};
+					console.log("define loopSuprlays");
 					var loopSuprlays = function (n) {
+						console.log("execute loopSuprlays");
 						if (n < _suprlays.length) {
 							var _suprlay = _suprlays[n];
 							suprlayMod.insOrUpdSuprlay(_suprlay.code.trim().toUpperCase(), _suprlay.name.trim().toLowerCase(), _suprlay.logo, _suprlay.dependsOn ? _suprlay.dependsOn.split(' ').join('').split(',') : [], n, function (err_supr, res_supr) {
@@ -758,7 +765,9 @@ var saveManifest = function (callback) {
 							return loopProcs(0);
 						}
 					};
+					console.log("define loopPlatfrms");
 					var loopPlatfrms = function (i) {
+						console.log("execute loopPlatfrms");
 						if (i < _platfrms.length) {
 							var _platfrm = _platfrms[i];
 							platfrmMod.insOrUpdPlatfrm(_platfrm.code.trim().toUpperCase(), _platfrm.name.trim().toLowerCase(), _platfrm.logo, _platfrm.dependsOn ? _platfrm.dependsOn.split(' ').join('').split(',') : [], i, function (err_plat, res_plat) {
@@ -872,10 +881,12 @@ var saveManifest = function (callback) {
 							return loopSuprlays(0);
 						}
 					};
+					console.log("define callback");
 					callback(null, {
 						'save': true
 					});
 					// deleting previous database
+					console.log("deleting previous database");
 					procMod.delAllProcs(function (err_del, res_del) {
 						winston.log('info', 'deleting proccess...');
 						if (err_del) {
@@ -901,6 +912,7 @@ var saveManifest = function (callback) {
 										if (err_del) {
 											winston.log('error', err_del.message, err_del);
 										}
+										console.log("define loopPlatfrms(0)");
 										return loopPlatfrms(0);
 									});
 								});
@@ -908,6 +920,7 @@ var saveManifest = function (callback) {
 						});
 					});
 				} else {
+					console.log("not saveManifest");
 					return callback(null, {
 						'save': false
 					});
