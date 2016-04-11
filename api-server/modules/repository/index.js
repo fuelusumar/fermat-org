@@ -1,4 +1,4 @@
-var libxml = require('libxmljs');
+//var libxml = require('libxmljs');
 var lockMod = require('./lock');
 var procMod = require('./process');
 var compMod = require('./component');
@@ -309,7 +309,8 @@ exports.checkManifest = function (req, next) {
 				next(err_xsd, null);
 			} else {
 				try {
-					var xsdDoc = libxml.parseXml(res_xsd);
+					return next(null, "FermatManifest Cool");
+					/*var xsdDoc = libxml.parseXml(res_xsd);
 					loadMod.getManifestWithExt('xml', function (err_xml, res_xml) {
 						if (err_xml) {
 							next(err_xml, null);
@@ -328,7 +329,7 @@ exports.checkManifest = function (req, next) {
 								});
 							}
 						}
-					});
+					});*/
 				} catch (e) {
 					return next(null, {
 						"message": e.message,

@@ -23,7 +23,6 @@ var lock = function (req, next) {
 			req.body.item_id = req.params.proc_id;
 			req.body.item_type = 'proc';
 			req.body.priority = 5;
-			console.dir(req.body);
 			repMod.doLock(req, function (error, result) {
 				if (error) {
 					next(error, null);
