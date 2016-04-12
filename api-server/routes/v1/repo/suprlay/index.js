@@ -75,15 +75,28 @@ var release = function (req) {
  */
 router.post('/', function (req, res, next) {
 	'use strict';
+	var band = true;
 	try {
 		if (!security.isValidData(req.body.code) || //
 			!security.isValidData(req.body.name) || //
-			!security.ifExistIsValidData(req.body.logo) || //
-			!security.isValidData(req.body.order)) {
+			!security.ifExistIsValidData(req.body.logo)) {
+			band = false;
 			res.status(412).send({
 				message: 'missing or invalid data'
 			});
-		} else {
+		} 
+		if (req.body.order === undefined || req.body.order === null)
+			req.body.order = 0;
+		else {
+			if (!security.isValidData(req.body.order)) {
+				band = false;
+				res.status(412).send({
+					"message": "invalid data"
+				});
+			}
+		}
+
+		if (band) {
 			repMod.addSuprLay(req, function (error, result) {
 				if (error) {
 					res.status(200).send(error);

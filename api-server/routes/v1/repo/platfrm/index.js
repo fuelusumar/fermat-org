@@ -14,7 +14,7 @@ var security = require('../../../../lib/utils/security');
  *
  * @return {[type]} [description]
  */
-var lock = function (req, next) {
+var lock = function(req, next) {
 	console.log('doing lock...');
 	try {
 		console.dir(req.params);
@@ -24,7 +24,7 @@ var lock = function (req, next) {
 			req.body.item_type = 'platfrm';
 			req.body.priority = 5;
 			console.dir(req.body);
-			repMod.doLock(req, function (error, result) {
+			repMod.doLock(req, function(error, result) {
 				if (error) {
 					next(error, null);
 				} else {
@@ -47,9 +47,9 @@ var lock = function (req, next) {
  *
  * @return {[type]} [description]
  */
-var release = function (req) {
+var release = function(req) {
 	try {
-		repMod.doRelease(req, function (error, result) {
+		repMod.doRelease(req, function(error, result) {
 			if (error) {
 				winston.log('error', 'Error releasing platfrm lock', error);
 			}
@@ -73,18 +73,30 @@ var release = function (req) {
  * @apiGroup Repo-Platform
  * @apiDescription Add a platform to the architecture of fermat.
  */
-router.post('/', function (req, res, next) {
+router.post('/', function(req, res, next) {
 	'use strict';
+	var band = true;
 	try {
 		if (!security.isValidData(req.body.code) || //
-			!security.isValidData(req.body.name) || //
-			!security.ifExistIsValidData(req.body.logo) || //
-			!security.isValidData(req.body.order)) {
+			!security.isValidData(req.body.name) ||
+			!security.ifExistIsValidData(req.body.logo)) {
+			band = false
 			res.status(412).send({
 				"message": "missing or invalid data"
 			});
-		} else {
-			repMod.addPlatform(req, function (error, result) {
+		}
+		if (req.body.order === undefined || req.body.order === null)
+			req.body.order = 0;
+		else {
+			if (!security.isValidData(req.body.order)) {
+				band = false;
+				res.status(412).send({
+					"message": "invalid data"
+				});
+			}
+		}
+		if (band) {
+			repMod.addPlatform(req, function(error, result) {
 				if (error) {
 					res.status(200).send(error);
 				} else {
@@ -103,10 +115,10 @@ router.post('/', function (req, res, next) {
  * @apiGroup Repo-Platform
  * @apiDescription Get list platforms from the architecture of fermat.
  */
-router.get('/', function (req, res, next) {
+router.get('/', function(req, res, next) {
 	'use strict';
 	try {
-		repMod.listPlatforms(req, function (error, result) {
+		repMod.listPlatforms(req, function(error, result) {
 			if (error) {
 				res.status(200).send(error);
 			} else {
@@ -125,14 +137,14 @@ router.get('/', function (req, res, next) {
  * @apiParam {ObjectId} platfrm_id Represents the identifier of the platform.
  * @apiDescription Get platform from the architecture of fermat.
  */
-router.get('/:platfrm_id', function (req, res, next) {
+router.get('/:platfrm_id', function(req, res, next) {
 	'use strict';
 	try {
-		lock(req, function (err_lck, res_lck) {
+		lock(req, function(err_lck, res_lck) {
 			if (err_lck) {
 				res.status(423).send(err_lck);
 			} else {
-				repMod.getPltf(req, function (error, result) {
+				repMod.getPltf(req, function(error, result) {
 					if (error) {
 						res.status(200).send(error);
 					} else {
@@ -159,7 +171,7 @@ router.get('/:platfrm_id', function (req, res, next) {
  * @apiParam {ObjectId} platfrm_id Represents the identifier of the platform.
  * @apiDescription Update platform from the architecture of fermat.
  */
-router.put('/:platfrm_id', function (req, res, next) {
+router.put('/:platfrm_id', function(req, res, next) {
 	'use strict';
 	try {
 		if (!security.isValidData(req.params.platfrm_id) ||
@@ -170,7 +182,7 @@ router.put('/:platfrm_id', function (req, res, next) {
 				"message": "missing or invalid data"
 			});
 		} else {
-			repMod.uptPltf(req, function (error, result) {
+			repMod.uptPltf(req, function(error, result) {
 				if (error) {
 					res.status(200).send(error);
 				} else {
@@ -197,10 +209,10 @@ router.put('/:platfrm_id', function (req, res, next) {
  * @apiParam {ObjectId} platfrm_id Represents the identifier of the platform.
  * @apiDescription Delete platform from the architecture of fermat.
  */
-router.delete('/:platfrm_id', function (req, res, next) {
+router.delete('/:platfrm_id', function(req, res, next) {
 	'use strict';
 	try {
-		repMod.delPltf(req, function (error, result) {
+		repMod.delPltf(req, function(error, result) {
 			if (error) {
 				console.log(error);
 				res.status(200).send(error);
