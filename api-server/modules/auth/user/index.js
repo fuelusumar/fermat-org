@@ -2,6 +2,7 @@ var devMod = require('../../repository/developer');
 var usrSrv = require('./services/usr');
 var UsrMdl = require('./models/usr');
 var DevMdl = require('../../repository/developer/models/dev');
+var UsrPermMdl = require('./models/usrPerm');
 /**
  * [insOrUpdUsr description]
  * @param  {[type]}   usrnm      [description]
@@ -165,21 +166,28 @@ exports.delAllUsrs = function(callback) {
 		return callback(err, null);
 	}
 };
+var saveUsrAssingPerm = function(_master_id, _granted_id, callback) {
+	'use strict';
+
+	var usrPerm = new UsrPermMdl(_master_id, _granted_id);
+	usrSrv.insertUsrPerm(usrPerm, function(err, res) {
+		if (err) return callback(err, null);
+		if (res) return callback(null, res);
+	});
+};
 /**
- * [updPermission description]
+ * [changePermission description]
  * @param  {[type]}   usrnm    [description]
  * @param  {[type]}   perm     [description]
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
  */
-exports.updPermission = function(usrnm, perm, callback) {
+exports.changePermission = function(_master_usr_id, usrnm, perm, callback) {
 	'use strict';
 	try {
 		if (perm !== undefined || perm !== null)
 			usrSrv.findUsrByUsrnm(usrnm, function(err, usr) {
-				if (err) {
-					return callback(err, "User not found");
-				}
+				if (err) return callback(err, "User not found");
 				if (usr) {
 					var set_obj = {};
 					set_obj.perm = perm;
@@ -190,7 +198,13 @@ exports.updPermission = function(usrnm, perm, callback) {
 						}
 						if (res_upd) {
 							console.log("Response: ", res_upd);
-							return callback(null, usr);
+							saveUsrAssingPerm(_master_usr_id, usr._id, function(err, res) {
+								if (err) return callback(err, "Error saving the user that assign permission");
+								if (res) {
+									console.log ("Saving the user that assign permission");
+									return callback(null, usr);
+								}
+							});
 						}
 					});
 				}

@@ -3,13 +3,18 @@ var Dao = require('../../../database/dao');
 var devMod = require('../../../repository/developer');
 var UsrMdl = require('../models/usr');
 var usrSch = require('../schemas/usr');
-
+var UsrPermMdl = require('../models/usrPerm');
+var usrPermSch = require('../schemas/usrPerm');
 /**
  * [usrDao description]
- *
  * @type {Dao}
  */
 var usrDao = new Dao('Usr', usrSch, UsrMdl);
+/**
+ * [usrPermDao description]
+ * @type {Dao}
+ */
+var usrPermDao = new Dao('UsrPerm', usrPermSch, UsrPermMdl);
 
 /**
  * [insertUsrAndDev description]
@@ -26,6 +31,13 @@ exports.insertUsrAndDev = function (usr_mdl, dev_mdl, callback) {
     devMod.insOrUpdDev(dev_mdl.usrnm, dev_mdl.email, dev_mdl.name, dev_mdl.bday, dev_mdl.country,
     dev_mdl.avatar_url, dev_mdl.url, dev_mdl.bio, function (err, dev) {
     	callback(err, dev);
+    });
+};
+
+exports.insertUsrPerm = function (usrPerm_mdl, callback) {
+    'use strict';
+    usrPermDao.insertSchema(usrPerm_mdl, function (err, usr) {
+        callback(err, usr);
     });
 };
 

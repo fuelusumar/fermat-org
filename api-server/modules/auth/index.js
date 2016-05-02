@@ -279,20 +279,6 @@ exports.verifyTkn = function (axs_key, digest, callback) {
 	});
 };
 /**
- * [changePermission description]
- * @param  {[type]}   usrnm    [description]
- * @param  {[type]}   perm     [description]
- * @param  {Function} callback [description]
- * @return {[type]}            [description]
- */
-exports.changePermission = function (usrnm, perm, callback) {
-	'use strict';
-	usrMod.updPermission(usrnm, perm, function (err, resp) {
-		if (err) return callback(err, null);
-		if (resp) return callback(null, resp);
-	});
-};
-/**
  * Checks the user permission to edit.
  * @param  {[type]}   usr_id   [description]
  * @param  {[type]}   element  [description]
